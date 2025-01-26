@@ -4,7 +4,7 @@
 \alias{import_from_json}
 \title{Import Data from a JSON File}
 \usage{
-import_from_json(file_name)
+import_from_json(file_name, keywords = NA)
 }
 \arguments{
 \item{file_name}{The name of the JSON file to import.}

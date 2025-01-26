@@ -121,3 +121,16 @@ transform_links <- function(blocks, pages) {
 
   invisible(blocks)
 }
+
+transform_markup <- function(blocks) {
+
+  blocks[, content := gsub("**", "''", content, fixed = TRUE)]
+  blocks[, content := gsub("#### ", "<h5>", content, fixed = TRUE)]
+  blocks[, content := gsub("### ", "<h4>", content, fixed = TRUE)]
+  blocks[, content := gsub("## ", "<h3>", content, fixed = TRUE)]
+  blocks[, content := gsub("# ", "<h2>", content, fixed = TRUE)]
+  blocks[, content := gsub("#+BEGIN_QUOTE", "<blockquote>", content, fixed = TRUE)]
+  blocks[, content := gsub("#+END_QUOTE", "</blockquote>", content, fixed = TRUE)]
+
+  invisible(blocks)
+}

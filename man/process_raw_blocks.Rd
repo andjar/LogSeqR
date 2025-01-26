@@ -4,7 +4,7 @@
 \alias{process_raw_blocks}
 \title{Process Raw Blocks Data}
 \usage{
-process_raw_blocks(data)
+process_raw_blocks(data, keywords = NA)
 }
 \arguments{
 \item{data}{A list containing \code{blocks} and \code{pages} data.tables.}

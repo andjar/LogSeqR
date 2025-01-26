@@ -4,7 +4,7 @@
 \alias{export_to_json}
 \title{Export Data to a JSON File}
 \usage{
-export_to_json(data, file_name = "tiddlers.json")
+export_to_json(data, file_name = "tiddlers.json", use_streams = FALSE)
 }
 \arguments{
 \item{data}{A list containing \code{pages} and \code{blocks} data.tables.}

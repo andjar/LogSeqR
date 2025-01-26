@@ -19,12 +19,19 @@ export_to_server <- function(data) {
 #' @details The function processes `pages` and `blocks` to ensure compatibility with the JSON format.
 #'   Column names are modified to match the required format, and the combined data is written to the specified file.
 #' @export
-export_to_json <- function(data, file_name = "tiddlers.json") {
+export_to_json <- function(data, file_name = "tiddlers.json", use_streams = FALSE) {
+  jsonlite::write_json(
+    prepare_export(data = data, use_streams = use_streams),
+    file_name
+  )
+}
+
+prepare_export <- function(data, use_streams = FALSE) {
   pages <- data$pages
   pages[, `lq-type` := "page"]
   colnames(pages)[colnames(pages) == "title"] <- "lq-title"
-  colnames(pages)[colnames(pages) == "page_name"] <- "caption"
-  colnames(pages)[colnames(pages) == "id"] <- "title"
+  colnames(pages)[colnames(pages) == "page_name"] <- "title"
+  colnames(pages)[colnames(pages) == "id"] <- "lq-page-id"
 
   blocks <- data$blocks
   blocks[, `lq-type` := "block"]
@@ -36,11 +43,19 @@ export_to_json <- function(data, file_name = "tiddlers.json") {
   colnames(blocks)[colnames(blocks) == "text"] <- "lq_text"
   colnames(blocks)[colnames(blocks) == "content"] <- "text"
 
-  jsonlite::write_json(
-    rbind(pages,blocks, fill = TRUE),
-    file_name
-  )
+  if ( use_streams ) {
+    pages[, `stream-type` := "default"]
+    blocks[, `stream-type` := "default"]
 
+    colnames(blocks)[colnames(blocks) == "parent_id"] <- "parent"
+
+    colnames(pages)[colnames(pages) == "lq_children"] <- "stream-list"
+    colnames(blocks)[colnames(blocks) == "lq_children"] <- "stream-list"
+
+    blocks <- blocks[parent != title]
+  }
+
+  return(rbind(pages, blocks, fill = TRUE))
 }
 
 #' Export Data to Tiddler Files

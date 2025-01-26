@@ -19,14 +19,15 @@ import_from_http <- function() {
 #'     \item{blocks}{A data.table with extracted blocks.}
 #'   }
 #' @export
-import_from_json <- function(file_name) {
+import_from_json <- function(file_name, keywords = NA) {
   df_raw <- jsonlite::read_json(file_name)$blocks
-  return(
-    list(
-      pages  = json_pages_to_tiddler(df_raw),
-      blocks = json_blocks_to_tiddler(df_raw)
-    )
+  data <- list(
+    pages  = json_pages_to_tiddler(df_raw),
+    blocks = json_blocks_to_tiddler(df_raw)
   )
+  return(
+    process_raw_blocks(data, keywords)
+    )
 }
 
 #' Import Data from a SQLite Database
@@ -46,11 +47,19 @@ import_from_sqlite <- function() {
 #' @param data A list containing `blocks` and `pages` data.tables.
 #' @return The input data, invisibly modified in place.
 #' @export
-process_raw_blocks <- function(data) {
+process_raw_blocks <- function(data, keywords = NA) {
+
+  data$blocks[is.na(parent_id), lq_ancestors := NA]
+  data$blocks[is.na(parent_id), parent_id := page_id]
+
+  data$blocks <- transform_markup(data$blocks)
   data$blocks <- extract_tags(data$blocks)
   data$blocks <- extract_task_keywords(data$blocks)
-  # data$blocks <- extract_other_keywords(data$blocks)
-  data$blocks <- transform_links(data$blocks, data$pages)
+  if (any(!is.na(keywords))) {
+    data$blocks <- extract_other_keywords(data$blocks, keywords_of_interest = keywords)
+  }
+  # data$blocks <- transform_links(data$blocks, data$pages)
+
   invisible(data)
 }
 
@@ -65,7 +74,8 @@ json_page_to_tiddler <- function(data) {
 
   df_out <- data.table(
     id = data[["id"]],
-    page_name = data[["page-name"]]
+    page_name = data[["page-name"]],
+    lq_children = tid_collapse(vapply(data$children, function(x) {x$id}, FUN.VALUE = character(1)))
   )
 
   if (!is.null(data[["properties"]])) {
@@ -108,7 +118,22 @@ json_block_to_tiddler <- function(data, page_id, block_id = NA, ancestors = NA) 
     df_out <- rbindlist(lapply(data$children, function(k) {
       json_block_to_tiddler(k, page_id = page_id, block_id = data$id, ancestors = c(ancestors, data$id))
     }), fill = TRUE)
+
+    df_out <- rbind(
+      df_out,
+      data.table(
+        page_id = page_id,
+        parent_id = block_id,
+        block_id = data$id,
+        content = data$content,
+        lq_ancestors = tid_collapse(ancestors),
+        lq_children  = tid_collapse(vapply(data$children, function(x) {x$id}, FUN.VALUE = character(1))),
+        as.data.table(data$properties)
+      ),
+      fill = TRUE)
+
   } else {
+
     data.table(
       page_id = page_id,
       parent_id = block_id,
@@ -117,6 +142,7 @@ json_block_to_tiddler <- function(data, page_id, block_id = NA, ancestors = NA) 
       lq_ancestors = tid_collapse(ancestors),
       as.data.table(data$properties)
     )
+
   }
 }
 

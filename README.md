@@ -1,19 +1,7 @@
----
-output: github_document
----
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # LogSeqR
 
-The goal of LogSeqR is to ...
+The goal of LogSeqR is to …
 
 ## Installation
 
@@ -28,11 +16,13 @@ devtools::install_github("andjar/LogSeqR", ref = "main")
 
 ## Example
 
-This is a very basic example that converts a json exported from LogSeq to a json that can be imported to TiddlyWiki:
+This is a very basic example that converts a json exported from LogSeq
+to a json that can be imported to TiddlyWiki:
 
-```{r example}
+``` r
 library("LogSeqR")
 library("data.table")
+#> Warning: package 'data.table' was built under R version 4.3.3
 
 k <- import_from_json("test.json")
 export_to_json(k, use_streams = TRUE)
@@ -46,4 +36,5 @@ Compared to LogSeq:
 
 ![](screenshot_logseq.PNG)
 
-Note that properties are also exported, as well as tags and task status (however, they are not displayed by the default streams plugin).
+Note that properties are also exported, as well as tags and task status
+(however, they are not displayed by the default streams plugin).
