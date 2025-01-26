@@ -1,0 +1,44 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# LogSeqR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of LogSeqR is to ...
+
+## Installation
+
+You can install the development version of LogSeqR like so:
+
+``` r
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+
+devtools::install_github("andjar/LogSeqR", ref = "main")
+```
+
+## Example
+
+This is a very basic example that converts a json exported from LogSeq to a json that an be imported to TiddlyWiki:
+
+```{r example}
+library(LogSeqR)
+
+k <- import_from_json("test.json")
+k <- process_raw_blocks(k)
+export_to_json(k)
+```
