@@ -1,0 +1,25 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/reference/export_to_json.html</loc></url>
+<url><loc>/reference/export_to_server.html</loc></url>
+<url><loc>/reference/export_to_tids.html</loc></url>
+<url><loc>/reference/extract_other_keywords.html</loc></url>
+<url><loc>/reference/extract_tags.html</loc></url>
+<url><loc>/reference/extract_task_keywords.html</loc></url>
+<url><loc>/reference/import_from_http.html</loc></url>
+<url><loc>/reference/import_from_json.html</loc></url>
+<url><loc>/reference/import_from_sqlite.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/json_blocks_to_tiddler.html</loc></url>
+<url><loc>/reference/json_block_to_tiddler.html</loc></url>
+<url><loc>/reference/json_pages_to_tiddler.html</loc></url>
+<url><loc>/reference/json_page_to_tiddler.html</loc></url>
+<url><loc>/reference/LogSeqR-package.html</loc></url>
+<url><loc>/reference/process_raw_blocks.html</loc></url>
+<url><loc>/reference/tid_collapse.html</loc></url>
+<url><loc>/reference/transform_links.html</loc></url>
+</urlset>
+
